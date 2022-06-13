@@ -1,0 +1,22 @@
+@page "/"
+@using TicTacToe.Data
+
+<MudStack>
+    <MudText Align="Align.Center" Typo="Typo.h6">Wybierz tryb</MudText>
+    <MudButton
+        Variant="Variant.Filled" Color="Color.Primary"
+        @onclick="@(() => Nav.NavigateTo($"Game/{GameMode.WithPlayer}"))">
+        Z graczem
+    </MudButton>
+    <MudButton
+        Variant="Variant.Filled" Color="Color.Primary"
+        @onclick="@(() => Nav.NavigateTo($"Game/{GameMode.WithComputer}"))">
+        Z komputerem
+    </MudButton>
+</MudStack>
+
+@code {
+    [Inject] 
+    private NavigationManager Nav { get; set; }
+
+}

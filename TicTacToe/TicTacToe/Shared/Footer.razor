@@ -1,0 +1,20 @@
+@inject NavigationManager Nav
+
+<MudAppBar Bottom="true">
+    <MudGrid Justify="Justify.Center">
+        <MudItem>
+            <MudButton
+                Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
+                @onclick="@(() => Nav.NavigateTo("/"))">
+                Graj
+            </MudButton>
+        </MudItem>
+        <MudItem>
+            <MudButton
+                Variant="Variant.Filled" DisableElevation="true" Color="Color.Primary"
+                @onclick="@(() => Nav.NavigateTo("Statistics"))">
+                Statystyki
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</MudAppBar>

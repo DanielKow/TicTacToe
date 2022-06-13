@@ -1,0 +1,23 @@
+@using TicTacToe.Data
+@using Position = TicTacToe.Data.BoardPosition
+<MudGrid Justify="Justify.Center">
+    <CascadingValue Value="@_actualPlayer">
+        @foreach (var i in Enumerable.Range(0, 3))
+        {
+            foreach (var j in Enumerable.Range(0, 3))
+            {
+                <BoardField Position="@(new Position(i, j))" OnMoved="AfterMove"/>
+            }
+        }
+    </CascadingValue>
+</MudGrid>
+
+@code {
+    private PlayerType _actualPlayer = PlayerType.O;
+
+    private void AfterMove(BoardPosition boardPosition)
+    {
+        Console.WriteLine($"Place {_actualPlayer.ToString()} on {boardPosition}");
+        _actualPlayer = _actualPlayer == PlayerType.X ? PlayerType.O : PlayerType.X;
+    }
+}

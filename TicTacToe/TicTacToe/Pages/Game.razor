@@ -1,0 +1,23 @@
+﻿@page "/Game/{mode}"
+@using TicTacToe.Data
+
+<MudStack>
+    <MudText Align="Align.Center" Typo="Typo.h6">Grasz z @ModeName()</MudText>
+    <Board/>
+</MudStack>
+
+@code
+{
+    [Parameter]
+    public string Mode { get; set; }
+
+    private string ModeName()
+    {
+        return Mode switch
+        {
+            GameMode.WithComputer => "komputerem",
+            GameMode.WithPlayer => "graczem",
+            _ => string.Empty
+        };
+    }
+}

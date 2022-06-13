@@ -1,0 +1,43 @@
+@using TicTacToe.Data
+
+<MudPaper Class="pa-8 ma-2" Elevation="3" @onclick="Move">
+    @switch (State)
+    {
+        case FieldState.X:
+            <MudIcon Color="Color.Primary" Icon="@Icons.Material.Outlined.Close" Style="font-size: 6rem"/>
+            break;
+        case FieldState.O:
+            <MudIcon Color="Color.Secondary" Icon="@Icons.Material.Outlined.Circle" Style="font-size: 6rem"/>
+            break;
+        default:
+            <MudIcon Icon="@Icons.Material.Filled.Air" Style="font-size: 6rem; color: #fff"/>
+            break;
+    }
+</MudPaper>
+
+@code {
+    [Parameter]
+    public BoardPosition Position { get; set; }
+    
+    [Parameter]
+    public EventCallback<BoardPosition> OnMoved { get; set; } 
+    
+    [Parameter]
+    public FieldState State { get; set; } = FieldState.Empty;
+    
+    [CascadingParameter]
+    public PlayerType ActualPlayer { get; set; }
+
+    private string BoardFieldClass = "board-field";
+    
+    private async Task Move()
+    {
+        if (State != FieldState.Empty)
+        {
+            return;
+        }
+        
+        State = ActualPlayer == PlayerType.X ? FieldState.X : FieldState.O;
+        await OnMoved.InvokeAsync(Position);
+    }
+}
