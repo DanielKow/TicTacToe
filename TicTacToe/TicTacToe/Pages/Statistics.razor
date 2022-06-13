@@ -1,6 +1,90 @@
 @page "/Statistics"
-<h3>Statistics</h3>
+@using TicTacToe.Data
+<MudStack>
+    <MudText Align="Align.Center" Typo="Typo.h6">Statystyki</MudText>
+    <MudTable Items="_rows" Breakpoint="Breakpoint.Sm" Dense="true">
+        <HeaderContent>
+            <MudTh>Tryb</MudTh>
+            <MudTh>Gracz</MudTh>
+            <MudTh>Przeciwnik</MudTh>
+            <MudTh>Wynik</MudTh>
+            <MudTh>Liczba ruchów</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Tryb"><MudText>Z @context.Mode</MudText></MudTd>
+            <MudTd DataLabel="Gracz"><PlayerIcon IsX="@(context.Player == PlayerType.X)"/></MudTd>
+            <MudTd DataLabel="Przeciwnik"><PlayerIcon IsX="@(context.Opponent == PlayerType.X)"/></MudTd>
+            <MudTd DataLabel="Wynik">
+                @if (context.Result == GameResult.Draw)
+                {
+                    <MudText>Remis</MudText>
+                }
+                else
+                {
+                    <MudStack Row="true">
+                        <MudText>Wygrana: <PlayerIcon IsX="@(context.Opponent == PlayerType.X)"/></MudText>
+                    </MudStack>
+                }
+            </MudTd>
+            <MudTd DataLabel="Liczba ruchów"><MudText>@context.NumberOfMoves</MudText></MudTd>
+        </RowTemplate>
+    </MudTable>
+</MudStack>
 
 @code {
-    
+
+    private const string Computer = "komputerem";
+    private const string Player = "graczem";
+    private IEnumerable<StatisticsRow> _rows = new[]
+    {
+        new StatisticsRow
+        {
+            Mode = Computer,
+            Result = GameResult.XWin,
+            NumberOfMoves = 6,
+            Player = PlayerType.O,
+            Opponent = PlayerType.X
+        },
+        new StatisticsRow
+        {
+            Mode = Computer,
+            Result = GameResult.Draw,
+            NumberOfMoves = 9,
+            Player = PlayerType.X,
+            Opponent = PlayerType.O
+        },
+        new StatisticsRow
+        {
+            Mode = Player,
+            Result = GameResult.XWin,
+            NumberOfMoves = 7,
+            Player = PlayerType.X,
+            Opponent = PlayerType.O
+        },
+        new StatisticsRow
+        {
+            Mode = Player,
+            Result = GameResult.OWin,
+            NumberOfMoves = 9,
+            Player = PlayerType.X,
+            Opponent = PlayerType.O
+        },
+        new StatisticsRow
+        {
+            Mode = Computer,
+            Result = GameResult.OWin,
+            NumberOfMoves = 5,
+            Player = PlayerType.O,
+            Opponent = PlayerType.X
+        },
+        new StatisticsRow
+        {
+            Mode = Player,
+            Result = GameResult.Draw,
+            NumberOfMoves = 9,
+            Player = PlayerType.X,
+            Opponent = PlayerType.O
+        }
+    };
+
 }

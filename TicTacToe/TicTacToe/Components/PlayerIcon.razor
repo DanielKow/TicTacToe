@@ -1,0 +1,9 @@
+<MudText Typo="Typo.h4" Color="@(IsX ? Color.Primary : Color.Secondary)">
+    @(IsX ? "x" : "o")
+</MudText>
+
+@code
+{
+    [Parameter]
+    public bool IsX { get; set; }
+}

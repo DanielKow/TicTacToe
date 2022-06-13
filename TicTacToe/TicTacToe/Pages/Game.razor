@@ -3,7 +3,37 @@
 
 <MudStack>
     <MudText Align="Align.Center" Typo="Typo.h6">Grasz z @ModeName()</MudText>
-    <Board/>
+    <CascadingValue Value="_actualPlayer">
+        <Board OnMoved="AfterMove"/>
+    </CascadingValue>
+    @if (_result == GameResult.InProgress)
+    {
+        <MudText Align="Align.Center" Typo="Typo.subtitle1">
+            Ruch:
+            <MudText 
+                Typo="Typo.h4"
+                Color="@(_actualPlayer == PlayerType.O ? Color.Secondary : Color.Primary)">
+                @_actualPlayer.ToString().ToLower()
+            </MudText>
+        </MudText>
+    }
+    else if (_result == GameResult.Draw)
+    {
+        <MudText Align="Align.Center" Typo="Typo.subtitle1">
+            Remis
+        </MudText>
+    }
+    else
+    {
+        <MudText Align="Align.Center" Typo="Typo.subtitle1">
+            Wygrana:
+            <MudText 
+                Typo="Typo.h4"
+                Color="@(_result == GameResult.OWin ? Color.Secondary : Color.Primary)">
+                @(_result == GameResult.OWin ? "o" : "x")
+            </MudText>
+        </MudText>
+    }
 </MudStack>
 
 @code
@@ -11,6 +41,9 @@
     [Parameter]
     public string Mode { get; set; }
 
+    private PlayerType _actualPlayer = PlayerType.O;
+    private GameResult _result = GameResult.InProgress;
+    
     private string ModeName()
     {
         return Mode switch
@@ -19,5 +52,10 @@
             GameMode.WithPlayer => "graczem",
             _ => string.Empty
         };
+    }
+    
+    private void AfterMove()
+    {
+        _actualPlayer = _actualPlayer == PlayerType.X ? PlayerType.O : PlayerType.X;
     }
 }
