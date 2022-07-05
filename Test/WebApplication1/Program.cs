@@ -37,6 +37,7 @@ string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 byte[] buffer = Encoding.ASCII.GetBytes (data);
 int timeout = 120;
 PingReply reply = pingSender.Send ("eventstore", timeout, buffer, options);
+Console.WriteLine("Ping to eventstore");
 if (reply.Status == IPStatus.Success)
 {
     Console.WriteLine ("Address: {0}", reply.Address.ToString ());
