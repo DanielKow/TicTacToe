@@ -36,7 +36,7 @@ options.DontFragment = true;
 string data = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 byte[] buffer = Encoding.ASCII.GetBytes (data);
 int timeout = 120;
-PingReply reply = pingSender.Send ("evenstore", timeout, buffer, options);
+PingReply reply = pingSender.Send ("10.0.10.10", timeout, buffer, options);
 if (reply.Status == IPStatus.Success)
 {
     Console.WriteLine ("Address: {0}", reply.Address.ToString ());
