@@ -1,0 +1,115 @@
+version: '3.4'
+services:
+  app:
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: tic.tac.toe.app
+    build:
+      context: .
+      dockerfile: WebApi.PresentationLayer/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+      - redis
+  sourceA:
+    image: exchange.rates.source
+    build:
+      context: .
+      dockerfile: ExchangeRatesSource.PresentationLayer/Dockerfile
+    environment:
+      ExchangeRateType: A
+      ConnectionStrings__Db: User ID=root; Password=root; Host=dbA; Port=5432; Database=postgres;
+      ConnectionStrings__Redis: redisA:6379
+    depends_on:
+      - dbA
+      - redisA
+      - migratorA
+    networks:
+      - networkA
+      - web
+  sourceB:
+    image: exchange.rates.source
+    build:
+      context: .
+      dockerfile: ExchangeRatesSource.PresentationLayer/Dockerfile
+    environment:
+      ExchangeRateType: B
+      ConnectionStrings__Db: User ID=root; Password=root; Host=dbB; Port=5432; Database=postgres;
+      ConnectionStrings__Redis: redisB:6379
+    depends_on:
+      - dbB
+      - redisB
+      - migratorB
+    networks:
+      - networkB
+      - web
+  db:
+    ports:
+      - '9001:5432'
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    networks:
+      - networkA
+    volumes:
+      - postgres-data-b:/var/lib/posgresql/data
+  dbB:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    networks:
+      - networkB
+    volumes:
+      - postgres-data-a:/var/lib/posgresql/data
+  redis:
+    ports:
+      - '9002:6379'
+    image: redis:alpine
+    restart: always
+    networks:
+      - networkA
+    volumes:
+      - redis-data-a:/data
+  redisB:
+    image: redis:alpine
+    restart: always
+    networks:
+      - networkB
+    volumes:
+      - redis-data-b:/data
+  migratorA:
+    image: migrator
+    build:
+      context: .
+      dockerfile: Migrator/Dockerfile
+    environment:
+      ConnectionStrings__Db: User ID=root; Password=root; Host=dbA; Port=5432; Database=postgres;
+    depends_on:
+      - dbA
+    networks:
+      - networkA
+  migratorB:
+    image: migrator
+    build:
+      context: .
+      dockerfile: Migrator/Dockerfile
+    environment:
+      ConnectionStrings__Db: User ID=root; Password=root; Host=dbB; Port=5432; Database=postgres;
+    depends_on:
+      - dbB
+    networks:
+      - networkB
+networks:
+  networkB:
+  networkA:
+  web:
+volumes:
+  postgres-data-a:
+  postgres-data-b:
+  redis-data-a:
+  redis-data-b:
